@@ -2,85 +2,146 @@
 # -*- coding: utf-8 -*-
 import sys
 import getopt
-
-def findNextCellToFill(grid, i, j):
-    for x in range(i, 9):
-            for y in range(j, 9):
-                    if grid[x][y] == 0:
-                            return x, y
-    for x in range(0, 9):
-            for y in range(0, 9):
-                    if grid[x][y] == 0:
-                            return x, y
-    return -1, -1
+import unicodecsv
+import csv
+import time
+import backtrackingClass
+import backtrackingVAClass
+import backtrackingVAMVRClass
+import cowsay
 
 
-def isValid(grid, i, j, e):
-    rowOk = all([e != grid[i][x] for x in range(9)])
-    if rowOk:
-            columnOk = all([e != grid[x][j] for x in range(9)])
-            if columnOk:
-                    # finding the top left x,y co-ordinates of the section
-                    # containing the i,j cell
-                    secTopX, secTopY = 3 * (i/3), 3 * (j/3)
-                    for x in range(secTopX, secTopX+3):
-                            for y in range(secTopY, secTopY+3):
-                                    if grid[x][y] == e:
-                                            return False
-                    return True
-    return False
+def formatSudoku(sudoku):
+    return ('\n'.join([''.join(['{:1} '.format(item) for item in row])
+            for row in sudoku]))
 
 
-def solveSudoku(grid, i=0, j=0):
-    i, j = findNextCellToFill(grid, i, j)
-    if i == -1:
-            return True
-    for e in range(1, 10):
-            if isValid(grid, i, j, e):
-                    grid[i][j] = e
-                    if solveSudoku(grid, i, j):
-                            return True
-                    # Undo the current cell for backtracking
-                    grid[i][j] = 0
-    return False
+def solveSudoku(mode, inputItem):
+    resultSudoku = inputItem
+    assignment_tentatives = 0
+
+    if mode == "a":
+        btClass = backtrackingClass.btDefault()
+        resultSudoku = btClass.solve(inputItem)
+        assignment_tentatives = btClass.get_assignment_tentatives()
+    elif mode == "b":
+        btClass = backtrackingVAClass.btVA()
+        resultSudoku = btClass.solve(inputItem)
+        assignment_tentatives = btClass.get_assignment_tentatives()
+    elif mode == "c":
+        btClass = backtrackingVAMVRClass.btVAMVR()
+        resultSudoku = btClass.solve(inputItem)
+        assignment_tentatives = btClass.get_assignment_tentatives()
+
+    return resultSudoku, assignment_tentatives
 
 
-def printSudoku(sudoku):
-    print('\n'.join([''.join(['{:1} '.format(item) for item in row])
-          for row in sudoku]))
-    print
+def usage():
+    print "Usage: sudoku.py -p [a | b | c] [--cowmode]"
+    print "a : Verificação Adiante"
+    print "b : Verificação Adiante"
+    print "c : Verificação Adiante e MVR"
+    print "--cowmode: Cow Heuristic"
 
 
 def main(argv):
-    heuristica = ""
+    # configuracao de flags
+    cowmode = False
+    heuristica = None
     try:
-        opts, args = getopt.getopt(argv, "hp:", ["parameter="])
+        opts, args = getopt.getopt(argv, "hp:", ["cowmode"])
     except getopt.GetoptError:
-        print "sudoku.py -h -p <inputfile>"
+        print "sudoku.py -h -p <heuristica>"
+        usage()
         sys.exit(2)
-
     for opt, arg in opts:
         if opt == "-h":
-            print "sudoku.py -p [A | B]"
-            sys.exit()
-        elif opt in ("-p", "--Parameter"):
+            usage()
+            sys.exit(0)
+        elif opt in ("-p"):
             heuristica = arg
+        elif opt in ("--cowmode"):
+            cowmode = True
 
-    print heuristica
+    if heuristica is None:
+        usage()
+        sys.exit(2)
+
+    # analysis data
+    if heuristica is not None and heuristica == "b":
+        analysisFile = open("./Data/bVerAdi.csv", "wa")
+    elif heuristica is not None and heuristica == "c":
+        analysisFile = open("./Data/cbVerAdiMVR.csv", "wa")
+    else:
+        analysisFile = open("./Data/aSemHeuristica.csv", "wa")
+
+    w = unicodecsv.writer(analysisFile,
+                          encoding='UTF-8',
+                          delimiter=';',
+                          quotechar='"',
+                          quoting=csv.QUOTE_ALL)
+    w.writerow(["ASSIGNMENT_TENTATIVES", "TIME"])
+    # reading the input file
+    sudokuFile = open("./Data/entrada.txt", "r")
+    first_line = sudokuFile.readline()
+    first_line = int(first_line)
+    inputSet = []
+    for x in range(0, first_line):
+
+        input = []
+        for line in sudokuFile:
+            if line != "\n":
+                line = line.replace('\n', '')
+                line = line.split(" ")
+                line = map(int, line)
+                input.append(line)
+            else:
+                inputSet.append(input)
+                # print "input"
+                # print " "
+                input = []
+                break
+    inputSet.append(input)
+    # print len(inputSet)
+
     # My code here
-    input = [[5, 1, 7, 6, 0, 0, 0, 3, 4],
-             [2, 8, 9, 0, 0, 4, 0, 0, 0],
-             [3, 4, 6, 2, 0, 5, 0, 9, 0],
-             [6, 0, 2, 0, 0, 0, 0, 1, 0],
-             [0, 3, 8, 0, 0, 6, 0, 4, 7],
-             [0, 0, 0, 0, 0, 0, 0, 0, 0],
-             [0, 9, 0, 0, 0, 0, 0, 7, 8],
-             [7, 0, 3, 4, 0, 0, 5, 6, 0],
-             [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    for inputItem in inputSet:
+        # if cowmode is True:
+        #     print cowsay.CowSay().cowsay(formatSudoku(inputItem), 18)
+        # else:
+        #     print formatSudoku(inputItem)
+        # btClass = backtrackingClass.btDefault()
+        # formatSudoku(state)
+        try:
+            start_time = time.clock()
+            result, at = solveSudoku(heuristica, inputItem)
+            # resultSudoku = btClass.solve(inputItem)
+            elapsed_time = time.clock() - start_time
 
-    printSudoku(input)
-    solveSudoku(input)
-    printSudoku(input)
+            if result is not None:
+                w.writerow([at, elapsed_time])
 
+                if cowmode is True:
+                    print cowsay.CowSay().cowsay(formatSudoku(result), 18)
+                else:
+                    print formatSudoku(result)
+                print
+            else:
+                if cowmode is True:
+                    print cowsay.CowSay().cowsay("MUHHH")
+                else:
+                    print "Failure"
+        except ValueError as error:
+            elapsed_time = time.clock() - start_time
+            w.writerow([error.args[1], elapsed_time])
+            if cowmode is True:
+                print cowsay.CowSay().cowsay(str(error.args[0]))
+            else:
+                print(error.args[0])
+                print
+
+# start Sudoku Solver
 if __name__ == "__main__":
+
     main(sys.argv[1:])
+
