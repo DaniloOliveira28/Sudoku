@@ -1,20 +1,23 @@
 # Projeto 1 - SCC-5900  – Projeto de algoritmos
 Este projeto implementa um sistema que resolve o quebra-cabeças Sudoku utilizando algoritmos de força bruta. 
 
-Porém, normalmente os algoritmos de força bruta são pouco eficientes em termos de performance, assim, afim de melhorar este fato adicionaremos algumas heurísticas.
+Apesar de cumprir a missão, algoritmos de backtrackin pecam no quesito performance. Assim, afim de melhorar este fato neste projeto também adicionamos algumas heurísticas.
+
+Ao final do trabalho, rodamos os algoritmos implementados e analisamos os resultados.
 
 # Problemas de Satisfação de Restrições (PSR)
-Para aqueles que imaginam que o Sudoku é um problema de natureza oriental, desminto este grande equívoco. O problema proposto pelo jogo Sudoku é um problema, na verdade, que pode ser considerado de natureza de satisfação de restrição.
+Para aqueles que imaginam que o Sudoku é somente um problema de natureza oriental, desminto este grande equívoco. O problema proposto pelo jogo Sudoku é um problema, na verdade, que pode ser considerado de natureza de satisfação de restrição.
 
 Calma, querido leitor, explico.
 
 O objetivo do jogo Sudoku é encontrar uma solução na qual você precisa satisfazer um conjunto de regras.
+
 Por exemplo, dada um tablueiro de Sudoku, semi-completado com números de 1 a 9, você precisa descobrir os outros números que completem o trabuleiro, porém você:
 * não pode repetir número na mesma coluna;
 * não pode repetir número na mesma linha;
 * não pode repetir número na mesma grade 3x3. 
 
-Ou seja, você precisa encontrar uma solução que respeite determinadas restrições. Problema de satisfação de restrição!
+Ou seja, você precisa encontrar uma solução que respeite determinadas restrições. Ou seja é um problema de satisfação de restrição!
 
 A àqueles que precisam ver para crer, demonstro abaixo:
 
@@ -31,36 +34,37 @@ Problema:
 | . . . . . . . . . |
 ```
 Solução:
-```
-| **5** **1** **7** **6** **9** **8** **2** **3** **4** |
-| **2** **8** **9** 1 3 4 7 5 6 |
-| **3** **4** **6** 2 7 5 8 9 1 |
-| **6** 7 2 8 4 9 3 1 5 |
-| **1** 3 8 5 2 6 9 4 7 |
-| **9** 5 4 7 1 3 6 8 2 |
-| **4** 9 5 3 6 2 1 7 8 |
-| **7** 2 3 4 8 1 5 6 9 |
-| **8** 6 1 9 5 7 4 2 3 |
-```
 
-Como você pode perceber na linha 1, os números não se repete, na coluna 1, os números não se repetem e no quadrado 3x3, os números não se repetem. Parabéns! Você tem uma solução e pode fazer outra coisa da sua vida.
+<pre>
+| <b>5</b> <b>1</b> <b>7</b> <b>6</b> <b>9</b> <b>8</b> <b>2</b> <b>3</b> <b>4</b> |
+| <b>2</b> 8 9 1 3 4 7 5 6 |
+| <b>3</b> 4 6 2 7 5 8 9 1 |
+| <b>6</b> 7 2 8 4 9 3 1 5 |
+| <b>1</b> 3 8 5 2 6 9 4 7 |
+| <b>9</b> 5 4 7 1 3 6 8 2 |
+| <b>4</b> 9 5 3 6 2 1 7 8 |
+| <b>7</b> 2 3 4 8 1 5 6 9 |
+| <b>8</b> 6 1 9 5 7 4 2 3 |
+</pre>
+
+Como você pode perceber na linha 1, os números não se repetem, na coluna 1, os números não se repetem e no quadrado 3x3, os números não se repetem. Parabéns! Você tem uma solução e pode fazer outra coisa da sua vida.
 
 Agora, formalizando o problema e as restrições de uma possível solução segundo PSR.
 ```javascript
-Variáveis: {
-    [0,0];[0,1];[0,2];[0,3];[0,4];[0,5];[0,6];[0,7];[0,8];
-    [1,0];[1,1];[1,2];[1,3];[1,4];[1,5];[1,6];[1,7];[1,8];
-    [2,0];[2,1];[2,2];[2,3];[2,4];[2,5];[2,6];[2,7];[2,8];
-    [3,0];[3,1];[3,2];[3,3];[3,4];[3,5];[3,6];[3,7];[3,8];
-    [4,0];[4,1];[4,2];[4,3];[4,4];[4,5];[4,6];[4,7];[4,8];
-    [5,0];[5,1];[5,2];[5,3];[5,4];[5,5];[5,6];[5,7];[5,8];
-    [6,0];[6,1];[6,2];[6,3];[6,4];[6,5];[6,6];[6,7];[6,8];
-    [7,0];[7,1];[7,2];[7,3];[7,4];[7,5];[7,6];[7,7];[7,8];
-    [8,0];[8,1];[8,2];[8,3];[8,4];[8,5];[8,6];[8,7];[8,8]
+Variaveis: {
+    [0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],
+    [1,0],[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],
+    [2,0],[2,1],[2,2],[2,3],[2,4],[2,5],[2,6],[2,7],[2,8],
+    [3,0],[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],
+    [4,0],[4,1],[4,2],[4,3],[4,4],[4,5],[4,6],[4,7],[4,8],
+    [5,0],[5,1],[5,2],[5,3],[5,4],[5,5],[5,6],[5,7],[5,8],
+    [6,0],[6,1],[6,2],[6,3],[6,4],[6,5],[6,6],[6,7],[6,8],
+    [7,0],[7,1],[7,2],[7,3],[7,4],[7,5],[7,6],[7,7],[7,8],
+    [8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,6],[8,7],[8,8]
 }
 ```
 
-**Domínio**: {1, 2, 3, 4, 5, 6, 7, 8, 9}
+Domínio: {1, 2, 3, 4, 5, 6, 7, 8, 9}
 
 **Restrições**:
 * R1: Não repetir na linha;
@@ -85,13 +89,13 @@ Atribuição **completa**
 
 Existem várias técnicas para resolver o problema do Sudo Ku. Neste trabalho vamos usar o Backtracking e mais algumas heurísticas.
 
-A - Backtracking
+Algoritmo A - Backtracking (backtrackingClass.py)
 https://en.wikipedia.org/wiki/Backtracking
 
-B - Backtracking com verificação adiante
+Algoritmo B - Backtracking com verificação adiante (backtrackingVAClass.py)
 http://www.dai.ifma.edu.br/~jcsilva/material/IA-aula-5-CSP-2012.09.23.pdf
 
-C - Backtracking com verificação adiante e mínimos valores remanescentes
+Algoritmo C - Backtracking com verificação adiante e mínimos valores remanescentes (backtrackingVAMVRClass.py)
 http://www.dai.ifma.edu.br/~jcsilva/material/IA-aula-5-CSP-2012.09.23.pdf
 
 obs.: Uma vez que número de atribuições pode ser muito grande para as podas mais fracas, o atual programa aborta a busca quando o número de atribuições excede 1000000 e então imprime uma mensagem “Numero de atribuicoes excede limite maximo”.
@@ -100,11 +104,11 @@ obs.: Uma vez que número de atribuições pode ser muito grande para as poda
 
 Ao rodar o resultados no conjunto de testes formado por 95 jogos de sudoku, chegamos ao seguinte resultado:
 
-a- Resolveu 65 de 90 jogos. Executou em 1588 segundos. Somou 42.300.674 atribuições durante sua execução.
+Algoritmo A- Resolveu 65 de 90 jogos. Executou em 1588 segundos. Somou 42.300.674 atribuições durante sua execução.
 
-b- Resolveu 82 de 90 jogos. Executou em 1078 segundos. Somou 23.094.370 atribuições durante sua execução.
+Algoritmo B- Resolveu 82 de 90 jogos. Executou em 1078 segundos. Somou 23.094.370 atribuições durante sua execução.
 
-c- Resolveu 90 de 90 jogos. Executou em 98 segundos. Somou 1.493.560 atribuições durante sua execução.
+Algoritmo C- Resolveu 90 de 90 jogos. Executou em 98 segundos. Somou 1.493.560 atribuições durante sua execução.
 
 # Análise
 
