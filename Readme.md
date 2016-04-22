@@ -151,7 +151,6 @@ MacBook Pro (Retina, 13-inch, Mid 2014), 2.6 GHz Intel Core i5, 8 GB 1600 MHz DD
 ![alt text](https://github.com/DaniloOliveira28/Sudoku/blob/master/Data/cow.jpg "Cow Heuristic")
 
 
-
 # Referências
-[1] https://uva.onlinejudge.org/external/9/p989.pdf
-[1] http://stackoverflow.com/questions/1697334/algorithm-for-solving-sudoku
+    [1] https://uva.onlinejudge.org/external/9/p989.pdf
+    [2] http://stackoverflow.com/questions/1697334/algorithm-for-solving-sudoku
