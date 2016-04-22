@@ -37,8 +37,8 @@ Solução:
 
 <pre>
 | <b>5</b> <b>1</b> <b>7</b> <b>6</b> <b>9</b> <b>8</b> <b>2</b> <b>3</b> <b>4</b> |
-| <b>2</b> 8 9 1 3 4 7 5 6 |
-| <b>3</b> 4 6 2 7 5 8 9 1 |
+| <b>2</b> <b>8</b> <b>9</b> 1 3 4 7 5 6 |
+| <b>3</b> <b>4</b> <b>6</b> 2 7 5 8 9 1 |
 | <b>6</b> 7 2 8 4 9 3 1 5 |
 | <b>1</b> 3 8 5 2 6 9 4 7 |
 | <b>9</b> 5 4 7 1 3 6 8 2 |
@@ -49,7 +49,8 @@ Solução:
 
 Como você pode perceber na linha 1, os números não se repetem, na coluna 1, os números não se repetem e no quadrado 3x3, os números não se repetem. Parabéns! Você tem uma solução e pode fazer outra coisa da sua vida.
 
-Agora, formalizando o problema e as restrições de uma possível solução segundo PSR.
+Agora, formalizando o problema e as restrições de uma possível solução segundo as normas e regras de PSR.
+
 ```javascript
 Variaveis: {
     [0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],
@@ -98,11 +99,11 @@ http://www.dai.ifma.edu.br/~jcsilva/material/IA-aula-5-CSP-2012.09.23.pdf
 Algoritmo C - Backtracking com verificação adiante e mínimos valores remanescentes (backtrackingVAMVRClass.py)
 http://www.dai.ifma.edu.br/~jcsilva/material/IA-aula-5-CSP-2012.09.23.pdf
 
-obs.: Uma vez que número de atribuições pode ser muito grande para as podas mais fracas, o atual programa aborta a busca quando o número de atribuições excede 1000000 e então imprime uma mensagem “Numero de atribuicoes excede limite maximo”.
+obs.: Uma vez que número de atribuições pode ser muito grande para as podas mais fracas, o atual programa aborta quando o número de atribuições excede 1000000 e então imprime uma mensagem “Numero de atribuicoes excede limite maximo”.
 
 # Resultados
 
-Ao rodar o resultados no conjunto de testes formado por 95 jogos de sudoku, chegamos ao seguinte resultado:
+Ao rodar os algoritmos em um conjunto de testes formado por 95 jogos de sudoku, chegamos ao seguintes resultados:
 
 Algoritmo A- Resolveu 65 de 90 jogos. Executou em 1588 segundos. Somou 42.300.674 atribuições durante sua execução.
 
@@ -114,24 +115,24 @@ Algoritmo C- Resolveu 90 de 90 jogos. Executou em 98 segundos. Somou 1.493.560 a
 
 ## Com relação a Tentativas
 
-![alt text](https://github.com/DaniloOliveira28/Sudoku/blob/master/Data/histograma_tempo.png "Histograma de Tempo")
+![alt text](https://github.com/DaniloOliveira28/Sudoku/blob/master/Data/histograma_atribuicoes.png "Histograma de Tempo")
 
-Através do gráfico acima, percebe-se que houve um ganho entre a execuções dos três métodos.
+Através do gráfico acima, percebe-se que houve uma redução no número de atribuições necessárias para resolver o Sudo Ku entre a execuções dos três métodos.
 
-Percebe-se que o algoritmo A é o pior caso 
+Percebe-se que o algoritmo A é o pior, ou seja, que mais precisa mais atribuir para resolver.
 
-O algoritimo B reduz o número de execuções que estouraram o limite enquanto aumenta o número de amostras com menos de 130.000 atribuições.
+O algoritimo B reduz o número de execuções que estouraram o limite enquanto aumenta o número de amostras que resolvem o problema com menos de 130.000 atribuições.
 
-Por fim, o algoritmo C executa praticamente todos 85/95 de amostras com menos de 130.000 atribuições e não estou o limite.
+Por fim, o algoritmo C executa praticamente todos 85/95 de amostras com menos de 130.000 atribuições e não estourou o limite.
 
 ## Com relação ao Tempo Gasto na Execução
 
-![alt text](https://github.com/DaniloOliveira28/Sudoku/blob/master/Data/histograma_atribuicoes.jpg "Histograma de Atribuições")
+![alt text](https://github.com/DaniloOliveira28/Sudoku/blob/master/Data/histograma_tempo.png "Histograma de Atribuições")
 
-Analisando os tempo gasto na execução percebe-se que o algoritmo mais rápido é de fato o C. Analisando o algoritmo A e B, há um fato curioso, o apesar do tempo geral de B ser menor que A, B em alguns casos é mais demorado que A!!!!
+Analisando os tempo gasto na execução percebe-se que o algoritmo mais rápido é de fato o C. Analisando o algoritmo A e B, há um fato curioso, apesar do tempo geral de B ser menor que A, B em alguns casos é mais demorado que A!!!!
 
 
-Porque? Bom, segundo minha análise, o tempo maior gasto em B em alguns casos ocorre devido ao fato que a cada atribuição consistente no tabuleiro requer que todos os valores que ainda não foram atribuídos e que são impactos por esta mudança sejam atualizados.
+Porque? Bom, segundo minha análise, o tempo maior gasto em B em alguns casos ocorre devido ao fato que a cada atribuição consistente no tabuleiro requer a atualização de todos os valores que ainda não foram atribuídos e que são impactos por esta mudança.
 
 obs.: Os testes foram realizados em uma máquina:
 MacBook Pro (Retina, 13-inch, Mid 2014), 2.6 GHz Intel Core i5, 8 GB 1600 MHz DDR3.
