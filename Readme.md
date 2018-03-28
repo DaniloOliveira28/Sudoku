@@ -1,9 +1,9 @@
 # Projeto 1 - SCC-5900  – Projeto de algoritmos
 Este projeto implementa um sistema que resolve o quebra-cabeças Sudoku utilizando algoritmos de força bruta. 
 
-Apesar de cumprir a missão, algoritmos de backtrackin pecam no quesito performance. Assim, afim de melhorar este fato neste projeto também adicionamos algumas heurísticas.
+Apesar de cumprir a missão, algoritmos de força bruta pecam no quesito performance. Afim de melhorar a performance do projeto adicionamos algumas heurísticas.
 
-Ao final do trabalho, rodamos os algoritmos implementados e analisamos os resultados.
+No restante do trabalho, rodamos os algoritmos de força bruta sem e com heurísticas, analisamos e comparamos os resultados.
 
 # Problemas de Satisfação de Restrições (PSR)
 Para aqueles que imaginam que o Sudoku é somente um problema de natureza oriental, desminto este grande equívoco. O problema proposto pelo jogo Sudoku é um problema, na verdade, que pode ser considerado de natureza de satisfação de restrição.
